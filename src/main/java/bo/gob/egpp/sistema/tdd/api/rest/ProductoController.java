@@ -13,23 +13,34 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
-@RestController
-@RequestMapping("/api/productos")
-@AllArgsConstructor
+/**
+ * Controlador REST para gestionar productos.
+ * Expone endpoints HTTP para realizar operaciones CRUD sobre productos, como agregar un nuevo producto.
+ * Utiliza {@link ProductoConverter} para convertir entre la entidad Producto y su DTO, ProductoVO,
+ * y {@link IProductoService} para manejar la lógica de negocio relacionada con los productos.
+ */
+@RestController // Marca la clase como un controlador REST.
+@RequestMapping("/api/productos") // Define la ruta base para todos los endpoints en este controlador.
+@AllArgsConstructor // Lombok genera automáticamente un constructor con todos los campos finales como argumentos.
 public class ProductoController {
 
-    private final ProductoConverter productoConverter;
+    private final ProductoConverter productoConverter; // Dependencia para convertir entre Producto y ProductoVO.
+    private final IProductoService productoService; // Servicio que contiene la lógica de negocio para productos.
 
-    private final IProductoService productoService;
-
-    @PostMapping
+    /**
+     * Endpoint para agregar un nuevo producto.
+     * Recibe los datos del producto en formato JSON, los convierte a la entidad Producto,
+     * invoca el servicio de productos para agregar el producto a la base de datos y retorna
+     * el producto agregado en formato ProductoVO.
+     *
+     * @param productVO Los datos del producto a agregar, recibidos como un JSON en el cuerpo de la solicitud.
+     * @return ResponseEntity que encapsula el ProductoVO agregado, con un estado HTTP adecuado.
+     */
+    @PostMapping // Marca este método para manejar solicitudes POST.
     public ResponseEntity<ProductoVO> agregarProductoEndpoint(@RequestBody final ProductoVO productVO) {
-        final Producto producto = this.productoConverter.convertirToDomain(productVO);
-
-        Producto resultado = this.productoService.agregarProducto(producto);
-
-        return ResponseEntity.of(Optional.of(this.productoConverter.convertirToVO(resultado)));
-
+        final Producto producto = productoConverter.convertirToDomain(productVO); // Convierte de ProductoVO a Producto.
+        Producto resultado = productoService.agregarProducto(producto); // Agrega el producto a través del servicio.
+        return ResponseEntity.of(Optional.of(productoConverter.convertirToVO(resultado))); // Retorna el ProductoVO convertido con un estado HTTP 200 OK.
     }
 
 }
