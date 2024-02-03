@@ -3,6 +3,8 @@ package bo.gob.egpp.sistema.tdd.infrastructure.repository;
 import bo.gob.egpp.sistema.tdd.infrastructure.domain.Producto;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Interfaz para el repositorio de productos, siguiendo el patrón de diseño de repositorio.
  * Define las operaciones de persistencia que se pueden realizar sobre las entidades Producto,
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Repository;
  * Funciona como una abstracción de una colección de objetos de dominio Producto, ofreciendo
  * una interfaz orientada a objetos para interactuar con la capa de persistencia.
  */
-@Repository
 // Anotación de Spring que indica que esta interfaz es un componente de repositorio, elegible para la creación de instancias y la inyección de dependencias por el contenedor de Spring.
 public interface IProductoRepository {
 
@@ -28,5 +29,11 @@ public interface IProductoRepository {
      * modificada por el proceso de persistencia (como la asignación de un ID único).
      */
     Producto registrarProducto(Producto producto);
+
+    void removerProducto(int pIdentificadorToEliminar);
+
+    Producto encontrarProductoPorId(int pIdentificadorToBuscar);
+
+    List<Producto> listarTodosLosProductos();
 
 }

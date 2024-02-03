@@ -37,4 +37,24 @@ public class ProductoServiceImplTest {
         verify(this.productoRepository).registrarProducto(producto);
     }
 
+    @Test
+    public void deberiaLlamarAlRepositorioParaEliminarProducto() {
+        final int identificadorToEliminar = 1;
+        sut.eliminarProducto(identificadorToEliminar);
+        verify(this.productoRepository).removerProducto(identificadorToEliminar);
+    }
+
+    @Test
+    public void deberiaLlamarAlRepositorioParaEncontrarProducto() {
+        final int identificadorToBuscar = 1;
+        sut.buscarProductoPorId(identificadorToBuscar);
+        verify(this.productoRepository).encontrarProductoPorId(identificadorToBuscar);
+    }
+
+    @Test
+    public void deberiaLlamarAlRepositorioParaListarProductos() {
+        sut.listarProductos();
+        verify(this.productoRepository).listarTodosLosProductos();
+    }
+
 }

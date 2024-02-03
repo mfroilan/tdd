@@ -6,12 +6,11 @@ import bo.gob.egpp.sistema.tdd.infrastructure.domain.Producto;
 import bo.gob.egpp.sistema.tdd.infrastructure.service.IProductoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Controlador REST para gestionar productos.
@@ -41,6 +40,30 @@ public class ProductoController {
         final Producto producto = productoConverter.convertirToDomain(productVO); // Convierte de ProductoVO a Producto.
         Producto resultado = productoService.agregarProducto(producto); // Agrega el producto a través del servicio.
         return ResponseEntity.of(Optional.of(productoConverter.convertirToVO(resultado))); // Retorna el ProductoVO convertido con un estado HTTP 200 OK.
+    }
+
+    @DeleteMapping("/{id}")
+    public void eliminarProductoEndpoint(@PathVariable(name = "id") final int pIdentificadorToEliminar) {
+        this.productoService.eliminarProducto(pIdentificadorToEliminar);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductoVO> encontrarProductoPorIdEndpoint(@PathVariable(name = "id") final int pIdentificadorToBuscar) {
+        Producto resultado = this.productoService.buscarProductoPorId(pIdentificadorToBuscar);
+        return ResponseEntity.of(Optional.of(this.productoConverter.convertirToVO(resultado)));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ProductoVO>> obtenerListaDeProductos() {
+
+        List<Producto> productos = this.productoService.listarProductos();
+
+        List<ProductoVO> productoVOS = productos.stream()
+                .map(producto -> this.productoConverter.convertirToVO(producto))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.of(Optional.of(productoVOS));
+
     }
 
 }

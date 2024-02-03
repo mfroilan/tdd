@@ -4,6 +4,8 @@ import bo.gob.egpp.sistema.tdd.infrastructure.domain.Producto;
 import bo.gob.egpp.sistema.tdd.infrastructure.service.impl.ProductoRepositoryPostgreSQLImpl;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -30,6 +32,53 @@ public class ProductoRepositoryPostgreSQLTest {
         // Verificación de que la lista de productos contiene exactamente un elemento después del registro.
         // Esto indica que el producto fue añadido correctamente.
         assertEquals(1, ProductoRepositoryPostgreSQLImpl.productos.size());
+    }
+
+    @Test
+    public void deberiaEliminarProductoToBaseDeDatos() {
+        final int identificadorToEliminar = 1;
+        final Producto producto = Producto.builder()
+                .id(identificadorToEliminar)
+                .build();
+        sut.registrarProducto(producto);
+        sut.removerProducto(identificadorToEliminar);
+        assertEquals(0, ProductoRepositoryPostgreSQLImpl.productos.size());
+    }
+
+    @Test
+    public void deberiaEncontrarProductoPorId() {
+        final int identificadorToBuscar = 1;
+        final Producto producto = Producto.builder()
+                .id(identificadorToBuscar)
+                .build();
+        sut.registrarProducto(producto);
+        Producto productoBuscado = sut.encontrarProductoPorId(identificadorToBuscar);
+        assertEquals(identificadorToBuscar, productoBuscado.getId());
+    }
+
+    @Test
+    public void deberiaRetornarTodosLosProductos() {
+        final Producto producto_1 = Producto.builder().id(1).build();
+        final Producto producto_2 = Producto.builder().id(2).build();
+        final Producto producto_3 = Producto.builder().id(3).build();
+        final Producto producto_4 = Producto.builder().id(4).build();
+        final Producto producto_5 = Producto.builder().id(5).build();
+
+        sut.registrarProducto(producto_1);
+        sut.registrarProducto(producto_2);
+        sut.registrarProducto(producto_3);
+        sut.registrarProducto(producto_4);
+        sut.registrarProducto(producto_5);
+
+        List<Producto> productos = sut.listarTodosLosProductos();
+        final int totalProductos = 5;
+        assertEquals(totalProductos, productos.size());
+        int identificadorEsperado = 3;
+        for (Producto p : productos) {
+            if (p.getId() == identificadorEsperado)
+                assertEquals(identificadorEsperado, p.getId());
+            identificadorEsperado++;
+        }
     }
 
 }

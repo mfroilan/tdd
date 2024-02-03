@@ -6,6 +6,8 @@ import bo.gob.egpp.sistema.tdd.infrastructure.service.IProductoService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Servicio que implementa la lógica de negocio para operaciones relacionadas con productos.
  * Este servicio proporciona una capa de abstracción sobre el repositorio de productos,
@@ -36,6 +38,21 @@ public class ProductoServiceImpl implements IProductoService {
     public Producto agregarProducto(Producto producto) {
         // Delegación de la operación de registro al repositorio de productos.
         return this.productoRepository.registrarProducto(producto);
+    }
+
+    @Override
+    public void eliminarProducto(int pIdentificadorToEliminar) {
+        this.productoRepository.removerProducto(pIdentificadorToEliminar);
+    }
+
+    @Override
+    public Producto buscarProductoPorId(int pIdentificadorToBuscar) {
+        return this.productoRepository.encontrarProductoPorId(pIdentificadorToBuscar);
+    }
+
+    @Override
+    public List<Producto> listarProductos() {
+        return this.productoRepository.listarTodosLosProductos();
     }
 
 }

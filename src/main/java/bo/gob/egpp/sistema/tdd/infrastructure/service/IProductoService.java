@@ -2,6 +2,8 @@ package bo.gob.egpp.sistema.tdd.infrastructure.service;
 
 import bo.gob.egpp.sistema.tdd.infrastructure.domain.Producto;
 
+import java.util.List;
+
 /**
  * Interfaz para el servicio de productos.
  * Define las operaciones de alto nivel que se pueden realizar sobre los productos dentro de la aplicación.
@@ -21,5 +23,11 @@ public interface IProductoService {
      * el proceso de agregación, como la asignación de un identificador único.
      */
     Producto agregarProducto(Producto producto);
+
+    void eliminarProducto(int pIdentificadorToEliminar);
+
+    Producto buscarProductoPorId(int pIdentificadorToBuscar);
+
+    List<Producto> listarProductos();
 
 }

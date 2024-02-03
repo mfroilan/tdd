@@ -53,4 +53,28 @@ public class ProductoControllerTest {
         verify(this.productoService).agregarProducto(producto);
     }
 
+    @Test
+    public void deberiaLlamarAlServicioParaEliminarProductos() {
+        final int identificadorToEliminar = 1;
+        sut.eliminarProductoEndpoint(identificadorToEliminar);
+        verify(this.productoService).eliminarProducto(identificadorToEliminar);
+    }
+
+    @Test
+    public void deberiaLlamarAlServicioParaEncontrarProducto() {
+        final int identificadorToBuscar = 1;
+        ProductoVO productoVO = ProductoVO.builder()
+                .id(identificadorToBuscar)
+                .build();
+        when(this.productoConverter.convertirToVO(any())).thenReturn(productoVO);
+        sut.encontrarProductoPorIdEndpoint(identificadorToBuscar);
+        verify(this.productoService).buscarProductoPorId(identificadorToBuscar);
+    }
+
+    @Test
+    public void deberiaLlamarAlServicioParaListarProductos() {
+        sut.obtenerListaDeProductos();
+        verify(this.productoService).listarProductos();
+    }
+
 }
