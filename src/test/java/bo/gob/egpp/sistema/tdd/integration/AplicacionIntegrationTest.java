@@ -11,8 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -39,7 +41,52 @@ public class AplicacionIntegrationTest {
 
     }
 
+    @Test
+    public void deberiaEliminarUnProducto() throws Exception {
+        final int identificadorProducto = 1;
 
+        ProductoVO productoVO =
+                ProductoVO.builder()
+                        .id(identificadorProducto)
+                        .build();
 
+        mockMvc.perform(post(URL_TEMPLATE_API)
+                .contentType(CONTENT_TYPE)
+                .content(objectMapper.writeValueAsString(productoVO)));
+
+        final int identificadorToEliminar = 1;
+
+        mockMvc.perform(delete(URL_TEMPLATE_API + "/{id}", identificadorToEliminar)
+                .contentType(CONTENT_TYPE))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void deberiaLlamarAlServicioParaEncontrarProducto() throws Exception {
+        final int identificadorProducto = 1;
+
+        ProductoVO productoVO =
+                ProductoVO.builder()
+                        .id(identificadorProducto)
+                        .build();
+
+        mockMvc.perform(post(URL_TEMPLATE_API)
+                .contentType(CONTENT_TYPE)
+                .content(objectMapper.writeValueAsString(productoVO)));
+
+        mockMvc.perform(get(URL_TEMPLATE_API + "/{id}", identificadorProducto)
+                .contentType(CONTENT_TYPE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(identificadorProducto));
+    }
+
+    @Test
+    public void deberiaLlamarAlServicioParaListarProductos() throws Exception {
+        mockMvc.perform(get(URL_TEMPLATE_API)
+                .contentType(CONTENT_TYPE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray());
+    }
 
 }

@@ -1,0 +1,33 @@
+{
+  "productos": [
+    {
+      "id": 1,
+      "nombre": "Chocolate I",
+      "precio": 7.81,
+      "clienteId": 1000
+    },
+    {
+      "id": 2,
+      "nombre": "Chocolate II",
+      "precio": 7.82,
+      "clienteId": 1002
+    },
+    {
+      "id": 3,
+      "nombre": "Chocolate III",
+      "precio": 7.83,
+      "clienteId": 1000
+    },    {
+      "id": 4,
+      "nombre": "Chocolate IV",
+      "precio": 7.84,
+      "clienteId": 1004
+    }
+  ,    {
+      "id": 5,
+      "nombre": "Chocolate V",
+      "precio": 7.85,
+      "clienteId": 1002
+    }
+  ]
+}
