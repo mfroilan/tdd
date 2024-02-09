@@ -1,0 +1,10 @@
+services:
+  postgres:
+    container_name: productos_dba
+    image: 'postgres:16.0'
+    environment:
+      - 'POSTGRES_DB=testdb'
+      - 'POSTGRES_PASSWORD=test'
+      - 'POSTGRES_USER=test'
+    ports:
+      - '5432'
