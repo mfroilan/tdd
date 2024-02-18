@@ -14,3 +14,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+
+# Para el almacenamiento
+storage:
+  location: uploads/imagenes

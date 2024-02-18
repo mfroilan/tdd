@@ -38,8 +38,8 @@ public class ProductoRestControllerIntegrationTest {
     @BeforeEach
     public void inicializarProductos() {
         this.productos = List.of(
-                new ProductoRecord(1, "Naranja", 2.38, 5000, null),
-                new ProductoRecord(2, "Frutilla", 4.52, 5000, null)
+                new ProductoRecord(1, "Naranja", 2.38, "", 5000, null),
+                new ProductoRecord(2, "Frutilla", 4.52, "", 5000, null)
         );
     }
 
@@ -77,7 +77,7 @@ public class ProductoRestControllerIntegrationTest {
     @Test
     public void deberiaCrearUnNuevoProductoCuandoUnProductoEsValido() throws Exception {
 
-        var producto = new ProductoRecord(3, "Chirimoya", 9.82, 5000, null);
+        var producto = new ProductoRecord(3, "Chirimoya", 9.82, "", 5000, null);
 
         when(this.productoRestRepository.save(producto)).thenReturn(producto);
 
@@ -132,7 +132,7 @@ public class ProductoRestControllerIntegrationTest {
     @Test
     public void deberiaActualizarUnProductoCuandoExistanUnIdentificadorValido() throws Exception {
 
-        var productoActualizado = new ProductoRecord(1, "Super Naranaja", 6.69, 6000, 1);
+        var productoActualizado = new ProductoRecord(1, "Super Naranaja", 6.69, "", 6000, 1);
 
         int identificadorValido = productoActualizado.id();
 
@@ -158,9 +158,6 @@ public class ProductoRestControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(productoEnviadoBody))
                 .andExpect(status().isOk());
-
-
-
     }
 
     @Test

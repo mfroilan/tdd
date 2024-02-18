@@ -19,7 +19,6 @@ public class ProductoJsonTest {
     @Autowired
     private JacksonTester<ProductoRecord> jacksonTester;
 
-
     @BeforeEach
     public void iniciar() {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -28,7 +27,7 @@ public class ProductoJsonTest {
 
     @Test
     public void deberiaSerializarUnProducto() throws IOException {
-        var producto = new ProductoRecord(2025, "Papaya del Futuro", 12.3, 6000, 1);
+        var producto = new ProductoRecord(2025, "Papaya del Futuro", 12.3, "", 6000, 1);
 
         String precioFormateado = String.format(Locale.US, "%.2f", producto.precio());
 
@@ -47,7 +46,7 @@ public class ProductoJsonTest {
     @Test
     public void deberiaDeserializarUnProducto() throws IOException {
 
-        var producto = new ProductoRecord(2024, "Papaya Dulce", 12.3, 6000, 1);
+        var producto = new ProductoRecord(2024, "Papaya Dulce", 12.3, "", 6000, 1);
         String precioFormateado = String.format(Locale.US, "%.2f", producto.precio());
 
         String productoBody = String.format("""

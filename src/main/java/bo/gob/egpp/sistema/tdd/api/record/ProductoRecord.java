@@ -12,6 +12,7 @@ public record ProductoRecord(
         @NotEmpty
         String nombre,
         Double precio,
+        String rutaImagenProducto,
         Integer clienteId,
         @Version
         Integer version

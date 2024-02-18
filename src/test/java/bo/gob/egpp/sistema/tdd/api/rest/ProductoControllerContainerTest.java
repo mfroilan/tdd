@@ -66,7 +66,7 @@ public class ProductoControllerContainerTest {
     @Test
     @Rollback
     public void deberiaCrearUnNuevoProductoCuandoEnProductoEsValido() {
-        ProductoRecord producto = new ProductoRecord(3, "Chirimoya", 9.82, 5000, 0);
+        ProductoRecord producto = new ProductoRecord(3, "Chirimoya", 9.82, "", 5000, 0);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -94,7 +94,7 @@ public class ProductoControllerContainerTest {
     @Rollback
     public void noDeberiaCrearUnNuevoProductoCuandoLaValidacionDelProductoFalla() {
         ProductoRecord producto =
-                new ProductoRecord(333, "", 3.5, 5000, 0);
+                new ProductoRecord(333, "", 3.5, "", 5000, 0);
 
         HttpHeaders encabezado = new HttpHeaders();
         encabezado.setContentType(MediaType.APPLICATION_JSON);
@@ -120,7 +120,7 @@ public class ProductoControllerContainerTest {
         assertThat(existeElProducto).isNotNull();
 
         ProductoRecord productoPorActualizar
-                = new ProductoRecord(existeElProducto.id(), "Super Uva sin Pepas", existeElProducto.precio(), 8000, 1);
+                = new ProductoRecord(existeElProducto.id(), "Super Uva sin Pepas", existeElProducto.precio(), "", 8000, 1);
 
         assertThat(productoPorActualizar.id()).isEqualTo(productoID);
 
