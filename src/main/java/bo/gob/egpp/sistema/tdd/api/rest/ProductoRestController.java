@@ -4,6 +4,8 @@ import bo.gob.egpp.sistema.tdd.api.record.ProductoRecord;
 import bo.gob.egpp.sistema.tdd.exception.ProductoNotFoundException;
 import bo.gob.egpp.sistema.tdd.infrastructure.repository.IProductoRestRepository;
 import bo.gob.egpp.sistema.tdd.infrastructure.service.AlmacenamientoService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -132,7 +134,6 @@ public class ProductoRestController {
 
     }
 
-
     @GetMapping("/images/{filename:.+}")
     public ResponseEntity<Resource> obtenerImagen(@PathVariable String filename) {
         try {
@@ -145,8 +146,41 @@ public class ProductoRestController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("/form")
+    public ResponseEntity<?> crearProducto(
+            @RequestPart("datos") @Valid String datosProducto,
+            @RequestPart("imagen") MultipartFile imagen
+    ) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ProductoRecord producto = objectMapper.readValue(datosProducto, ProductoRecord.class);
+
+        if (!Arrays.asList("image/jpeg", "image/png", "image/gif").contains(imagen.getContentType())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Formato de archivo no soportado");
+        }
+
+        try {
+            var productoGuardado = this.productoRestRepository.save(producto);
+            this.productoRestRepository.findById(productoGuardado.id())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado"));
+
+            var nombreArchivo = this.almacenamientoService.almacenarImagen(imagen, productoGuardado.id());
+
+            ProductoRecord productoResponse = new ProductoRecord(
+                    productoGuardado.id(),
+                    productoGuardado.nombre(),
+                    productoGuardado.precio(),
+                    nombreArchivo,
+                    productoGuardado.clienteId(),
+                    productoGuardado.version()
+            );
+
+            return new ResponseEntity<>(productoResponse, HttpStatus.CREATED);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Hubo un error al subir la imagen: " + e.getMessage());
+        }
+    }
+
 }
 
-
-// 4619640_food_fruit_fruits_orange_icon.png
-// 4619629_food_fruit_fruits_plum_plum fruit_icon.png
